@@ -10,10 +10,17 @@ import (
 
 // BaseConfig base.yml
 type BaseConfig struct {
-	AppID       string      `yaml:"app_id"`
-	AppSecret   string      `yaml:"app_secret"`
-	EncryptKey  string      `yaml:"encrypt_key"`
-	MongoConfig MongoConfig `yaml:"mongo_config"`
+	AppID         string        `yaml:"app_id"`
+	AppSecret     string        `yaml:"app_secret"`
+	EncryptKey    string        `yaml:"encrypt_key"`
+	MongoConfig   MongoConfig   `yaml:"mongo_config"`
+	JenkinsConfig JenkinsConfig `yaml:jenkins_config`
+}
+
+type JenkinsConfig struct {
+	Url      string `yaml:"url"`
+	Username string `yaml:"username,omitempty"`
+	Password string `yaml:"password,omitempty"`
 }
 
 type MongoConfig struct {

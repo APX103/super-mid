@@ -1,24 +1,25 @@
 package jenkins
 
 import (
-	"apx103.com/super-mid/runner/param"
-	"github.com/bndr/gojenkins"
+	"apx103.com/super-mid/command/cmd"
 )
 
 type JenkinsListRunner struct {
-	JenkinsClient *gojenkins.Jenkins
+	JenkinsClient *JenkinsClient
 }
 
-func NewJenkinsListdRunner() *JenkinsListRunner {
-	return &JenkinsListRunner{}
+func NewJenkinsListdRunner(jc *JenkinsClient) *JenkinsListRunner {
+	return &JenkinsListRunner{
+		JenkinsClient: jc,
+	}
 }
 
 func (jb *JenkinsListRunner) GetCmdPath() string {
 	return "jenkins.list"
 }
 
-func (jb *JenkinsListRunner) GetRunner() func(param.RunnerParam) {
-	return func(param param.RunnerParam) {
+func (jb *JenkinsListRunner) GetRunner() func(*cmd.RunnerParamMap) {
+	return func(paramMap *cmd.RunnerParamMap) {
 
 	}
 }

@@ -1,24 +1,25 @@
 package jenkins
 
 import (
-	"apx103.com/super-mid/runner/param"
-	"github.com/bndr/gojenkins"
+	"apx103.com/super-mid/command/cmd"
 )
 
 type JenkinsStatusRunner struct {
-	JenkinsClient *gojenkins.Jenkins
+	JenkinsClient *JenkinsClient
 }
 
-func NewJenkinsStatusRunner() *JenkinsStatusRunner {
-	return &JenkinsStatusRunner{}
+func NewJenkinsStatusRunner(jc *JenkinsClient) *JenkinsStatusRunner {
+	return &JenkinsStatusRunner{
+		JenkinsClient: jc,
+	}
 }
 
 func (jb *JenkinsStatusRunner) GetCmdPath() string {
-	return "jenkins.node"
+	return "jenkins.status"
 }
 
-func (jb *JenkinsStatusRunner) GetRunner() func(param.RunnerParam) {
-	return func(param param.RunnerParam) {
+func (jb *JenkinsStatusRunner) GetRunner() func(*cmd.RunnerParamMap) {
+	return func(paramMap *cmd.RunnerParamMap) {
 
 	}
 }

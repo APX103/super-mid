@@ -45,7 +45,26 @@ type TaskCmd struct {
 }
 
 // Task runner interface define.
+type RunnerParam interface {
+	GetCmdPath() string
+	GetParamStruct()
+}
+
+type RunnerParamMap struct {
+	Map map[string]RunnerParam
+}
+
 type TaskRunner interface {
 	GetCmdPath() string
-	GetRunner() func(taskName string, params map[string]string)
+	GetRunner() func(paramMap *RunnerParamMap)
+}
+
+func NewRunnerParamMap(runnerParams []RunnerParam) *RunnerParamMap {
+	_map := &RunnerParamMap{
+		Map: make(map[string]RunnerParam),
+	}
+	for _, rp := range runnerParams {
+		_map.Map[rp.GetCmdPath()] = rp
+	}
+	return _map
 }
