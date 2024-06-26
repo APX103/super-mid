@@ -47,6 +47,5 @@ type TaskCmd struct {
 // Task runner interface define.
 type TaskRunner interface {
 	GetCmdPath() string
-	GetTaskInfo() string
-	GetRunner() func(jobName string, params []ParamStruct)
+	GetRunner() func(taskName string, params map[string]string)
 }
