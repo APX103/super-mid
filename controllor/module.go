@@ -1,11 +1,10 @@
-package controllors
+package controllor
 
 import (
 	"go.uber.org/fx"
-	// "apx103.com/super-mid/controllors/bot"
-	// "apx103.com/super-mid/controllors/bot/config"
-	"apx103.com/super-mid/controllors/common"
-	"apx103.com/super-mid/controllors/demo"
+	// "apx103.com/super-mid/controllor/task"
+	"apx103.com/super-mid/controllor/common"
+	"apx103.com/super-mid/controllor/demo"
 )
 
 func AsController(f any) any {

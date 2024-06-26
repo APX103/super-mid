@@ -14,12 +14,13 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
-	"apx103.com/super-mid/controllors"
-	"apx103.com/super-mid/controllors/common"
+	"apx103.com/super-mid/controllor"
+	"apx103.com/super-mid/controllor/common"
+
 	// "apx103.com/super-mid/events"
 	// "apx103.com/super-mid/middleware"
 	// "apx103.com/super-mid/services"
-	// "apx103.com/super-mid/utils"
+	"apx103.com/super-mid/utils"
 )
 
 // Set logrus format
@@ -135,10 +136,10 @@ func init() {
 
 func main() {
 	app := fx.New(
-		// utils.Module,
+		utils.Module,
 		// events.Module,
 		// services.Module,
-		controllors.Module,
+		controllor.Module,
 		// middleware.Module,
 		fx.Provide(
 			fx.Annotate(
