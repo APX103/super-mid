@@ -2,6 +2,7 @@ package jenkins
 
 import (
 	"apx103.com/super-mid/command/cmd"
+	"github.com/sirupsen/logrus"
 )
 
 type JenkinsBuildRunner struct {
@@ -18,8 +19,8 @@ func (jb *JenkinsBuildRunner) GetCmdPath() string {
 	return "jenkins.build"
 }
 
-func (jb *JenkinsBuildRunner) GetRunner() func(*cmd.RunnerParamMap) {
-	return func(paramMap *cmd.RunnerParamMap) {
-
-	}
+func (jb *JenkinsBuildRunner) Run(*cmd.Task) {
+	logrus.Debug("Run command jenkins build")
 }
+
+func (jb *JenkinsBuildRunner) Finish() {}

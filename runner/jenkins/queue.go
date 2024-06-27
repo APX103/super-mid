@@ -1,8 +1,6 @@
 package jenkins
 
-import (
-	"apx103.com/super-mid/command/cmd"
-)
+import "apx103.com/super-mid/command/cmd"
 
 type JenkinsQueueRunner struct {
 	JenkinsClient *JenkinsClient
@@ -18,8 +16,7 @@ func (jb *JenkinsQueueRunner) GetCmdPath() string {
 	return "jenkins.node"
 }
 
-func (jb *JenkinsQueueRunner) GetRunner() func(*cmd.RunnerParamMap) {
-	return func(paramMap *cmd.RunnerParamMap) {
-
-	}
+func (jb *JenkinsQueueRunner) Run(*cmd.Task) {
 }
+
+func (jb *JenkinsQueueRunner) Finish() {}

@@ -44,27 +44,23 @@ type TaskCmd struct {
 	Params  map[string]*ParamStruct
 }
 
+// Task Info struct define.
+type Task struct {
+	TaskID           string
+	User             string
+	UserFeishuID     string
+	UserFeishuIDType string
+	FeishuChatID     string
+	CretaeTime       string
+	ComfirmTime      string
+	FinishTime       string
+	TaskDisc         string
+	TaskCmd          *TaskCmd
+}
+
 // Task runner interface define.
-type RunnerParam interface {
-	GetCmdPath() string
-	GetParamStruct()
-}
-
-type RunnerParamMap struct {
-	Map map[string]RunnerParam
-}
-
 type TaskRunner interface {
 	GetCmdPath() string
-	GetRunner() func(paramMap *RunnerParamMap)
-}
-
-func NewRunnerParamMap(runnerParams []RunnerParam) *RunnerParamMap {
-	_map := &RunnerParamMap{
-		Map: make(map[string]RunnerParam),
-	}
-	for _, rp := range runnerParams {
-		_map.Map[rp.GetCmdPath()] = rp
-	}
-	return _map
+	Run(taskCmd *Task)
+	Finish()
 }

@@ -4,24 +4,30 @@ import (
 	"encoding/json"
 	"io"
 
+	"apx103.com/super-mid/command/cmd"
+	"apx103.com/super-mid/message/feishu"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 )
 
 type TaskController struct {
-	Path       string
-	Method     string
-	Controller func(c *gin.Context)
+	Path          string
+	Method        string
+	Controller    func(c *gin.Context)
+	CommandParser *cmd.CmdParser
 }
 
-func NewPingController() *TaskController {
+func NewTaskController(cp *cmd.CmdParser) *TaskController {
+	logrus.Debug(" [Fx] NewTaskController Init ")
 	controller := &TaskController{
-		Path:   "/task",
-		Method: "POST",
+		Path:          "/task",
+		Method:        "POST",
+		CommandParser: cp,
 	}
 
 	controller.Controller = func(c *gin.Context) {
-		logrus.Info("web post req /api/config")
+		logrus.Info("web post req /task")
 		req := &WebPostTaskRequest{}
 		bytes, err := io.ReadAll(c.Request.Body)
 		if err != nil {
@@ -37,6 +43,29 @@ func NewPingController() *TaskController {
 			})
 			return
 		}
+		// cmd parse
+		cmdStr := controller.CommandParser.ParseCommand(req.CommandLine)
+		if cmdStr != "" {
+			resp := &RunnerWebResponse{
+				Code:    "0",
+				Message: feishu.BuildSimpleFeishuCardWithText("Help", cmdStr),
+				Content: cmdStr,
+			}
+			c.JSON(200, resp)
+		}
+		taskInfo := &cmd.Task{
+			TaskID:           uuid.NewV1().String(),
+			User:             req.UserName,
+			UserFeishuID:     req.FeishuSenderID,
+			UserFeishuIDType: req.FeishuSenderIDType,
+			FeishuChatID:     req.FeishuChatID,
+			TaskCmd:          controller.CommandParser.ParsedCmd,
+		}
+
+		// TODO runner
+		if controller.CommandParser.Runner != nil {
+			(*controller.CommandParser.Runner).Run(taskInfo)
+		}
 	}
 	return controller
 }
@@ -50,10 +79,5 @@ func (tc *TaskController) GetMethod() string {
 }
 
 func (tc *TaskController) GetController() func(c *gin.Context) {
-	return func(c *gin.Context) {
-		logrus.Info("Heartbeat. Health Check")
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	}
+	return tc.Controller
 }

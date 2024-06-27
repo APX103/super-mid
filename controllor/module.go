@@ -1,10 +1,10 @@
 package controllor
 
 import (
-	"go.uber.org/fx"
-	// "apx103.com/super-mid/controllor/task"
 	"apx103.com/super-mid/controllor/common"
 	"apx103.com/super-mid/controllor/demo"
+	"apx103.com/super-mid/controllor/task"
+	"go.uber.org/fx"
 )
 
 func AsController(f any) any {
@@ -19,10 +19,7 @@ func AsController(f any) any {
 
 var Module = fx.Module("Controller",
 	fx.Provide(
-		// fx.Annotate(
-		// 	bot.NewEventsMap,
-		// 	fx.ParamTags(`group:"botEvents"`),
-		// ),
 		AsController(demo.NewPingController),
+		AsController(task.NewTaskController),
 	),
 )

@@ -12,5 +12,5 @@ var Module = fx.Module("Command",
 			fx.ParamTags(`group:"task_runner"`),
 		),
 	),
-	fx.Provide(),
+	fx.Provide(cmd.NewCmdParser),
 )

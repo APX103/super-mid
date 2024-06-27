@@ -10,11 +10,9 @@ import (
 
 // BaseConfig base.yml
 type BaseConfig struct {
-	AppID         string        `yaml:"app_id"`
-	AppSecret     string        `yaml:"app_secret"`
-	EncryptKey    string        `yaml:"encrypt_key"`
+	MrMeeseeksUrl string        `yaml:"mr_meeseeks_url"`
 	MongoConfig   MongoConfig   `yaml:"mongo_config"`
-	JenkinsConfig JenkinsConfig `yaml:jenkins_config`
+	JenkinsConfig JenkinsConfig `yaml:"jenkins_config"`
 }
 
 type JenkinsConfig struct {
@@ -29,13 +27,6 @@ type MongoConfig struct {
 	Username string `yaml:"username,omitempty"`
 	Password string `yaml:"password,omitempty"`
 	Database string `yaml:"db"`
-}
-
-type RedisConfig struct {
-	Url      string `yaml:"url"`
-	Port     string `yaml:"port"`
-	Password string `yaml:"password,omitempty"`
-	Database int    `yaml:"db,omitempty"`
 }
 
 func NewBaseConfig() *BaseConfig {
@@ -67,9 +58,10 @@ func (i *BaseConfig) GetConfig() BaseConfig {
 		logrus.Debug(" Got config ")
 		return *conf
 	} else {
-		conf.AppID = os.Getenv("SUPERMIDEnvAppID")
-		conf.AppSecret = os.Getenv("SUPERMIDEnvAppSecret")
-		conf.EncryptKey = os.Getenv("SUPERMIDEnvEncryptKey")
+		conf.MrMeeseeksUrl = os.Getenv("SUPERMIDEnvMrMeeseeksUrl")
+		conf.JenkinsConfig.Url = os.Getenv("SUPERMIDEnvJenkinsUrl")
+		conf.JenkinsConfig.Username = os.Getenv("SUPERMIDEnvJenkinsUsername")
+		conf.JenkinsConfig.Password = os.Getenv("SUPERMIDEnvJenkinsPassword")
 		conf.MongoConfig.Url = os.Getenv("SUPERMIDEnvMongoConfigUrl")
 		conf.MongoConfig.Port = os.Getenv("SUPERMIDEnvMongoConfigPort")
 		conf.MongoConfig.Username = os.Getenv("SUPERMIDEnvMongoConfigUsername")

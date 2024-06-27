@@ -16,20 +16,24 @@ type CmdParser struct {
 	ParsedCmd *TaskCmd
 	mongoC    *mongoc.MongoClientImpl
 	runnerMap *TaskRunnerMap
+	Runner    *TaskRunner
 }
 
 func NewCmdParser(mongoc *mongoc.MongoClientImpl, rm *TaskRunnerMap) *CmdParser {
 	return &CmdParser{
 		mongoC:    mongoc,
 		runnerMap: rm,
+		Runner:    nil,
+		ParsedCmd: nil,
 	}
 }
 
-func (cp *CmdParser) ParseCommand(cmdString string) {
+func (cp *CmdParser) ParseCommand(cmdString string) string {
 	args, err := shellwords.Parse(cmdString)
 	if err != nil {
 		// TODO 使用MSG模块发送，命令解析错误指令
 		fmt.Println(err)
+		return ""
 	}
 	_cmd := cp.CreateParser()
 	_cmd.SetArgs(args)
@@ -37,7 +41,9 @@ func (cp *CmdParser) ParseCommand(cmdString string) {
 	if help_info != "" {
 		// TODO 使用MSG模块发送，指令标准输出
 		fmt.Println(help_info)
+		return help_info
 	}
+	return ""
 }
 
 // Create Parser for each command comes.
@@ -98,6 +104,7 @@ func (cp *CmdParser) NewCommand(rootCmd *cobra.Command, item *CobraCMD, taskCmd 
 		Run: func(cmd *cobra.Command, args []string) {
 			_taskCmd.Enable = true
 			// TODO Inject task runner here
+			cp.Runner = cp.runnerMap.runners[_cmdPath]
 			fmt.Println("============+ " + _cmdPath + " +============")
 		},
 	}

@@ -1,0 +1,28 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  before_script:
+    - docker login $harbor_url_prod_openmmlab -u $harbor_user_openmmlab -p $harbor_password_openmmlab
+  script:
+    - docker build -t $harbor_url_prod_openmmlab/public/super-mid:${CI_COMMIT_SHA:0:8} .
+    - docker push $harbor_url_prod_openmmlab/public/super-mid:${CI_COMMIT_SHA:0:8}
+    - docker rmi $harbor_url_prod_openmmlab/public/super-mid:${CI_COMMIT_SHA:0:8}
+  only:
+    - main
+  tags:
+    - ecs
+
+deploy:
+  stage: deploy
+  image: eng-center-registry.cn-shanghai.cr.aliyuncs.com/public/helm-kubectl
+  script:
+    - sed -i "s/harbor_url_prod_openmmlab/$harbor_url_prod_openmmlab/g" super-mid.kube.yml
+    - sed -i "s/latest/${CI_COMMIT_SHA:0:8}/g" super-mid.kube.yml
+    - kubectl --kubeconfig=$ALIKUBE_QA_CONFIG apply -f super-mid.kube.yml
+  only:
+    - main
+  tags:
+    - ecs

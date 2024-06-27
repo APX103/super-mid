@@ -1,8 +1,6 @@
 package jenkins
 
-import (
-	"apx103.com/super-mid/command/cmd"
-)
+import "apx103.com/super-mid/command/cmd"
 
 type JenkinsStatusRunner struct {
 	JenkinsClient *JenkinsClient
@@ -18,8 +16,7 @@ func (jb *JenkinsStatusRunner) GetCmdPath() string {
 	return "jenkins.status"
 }
 
-func (jb *JenkinsStatusRunner) GetRunner() func(*cmd.RunnerParamMap) {
-	return func(paramMap *cmd.RunnerParamMap) {
-
-	}
+func (jb *JenkinsStatusRunner) Run(*cmd.Task) {
 }
+
+func (jb *JenkinsStatusRunner) Finish() {}

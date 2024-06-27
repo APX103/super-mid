@@ -14,12 +14,11 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.uber.org/fx"
 
+	"apx103.com/super-mid/command"
 	"apx103.com/super-mid/controllor"
 	"apx103.com/super-mid/controllor/common"
-
-	// "apx103.com/super-mid/events"
-	// "apx103.com/super-mid/middleware"
-	// "apx103.com/super-mid/services"
+	"apx103.com/super-mid/message"
+	"apx103.com/super-mid/runner"
 	"apx103.com/super-mid/utils"
 )
 
@@ -137,10 +136,10 @@ func init() {
 func main() {
 	app := fx.New(
 		utils.Module,
-		// events.Module,
-		// services.Module,
+		runner.Module,
+		command.Module,
 		controllor.Module,
-		// middleware.Module,
+		message.Module,
 		fx.Provide(
 			fx.Annotate(
 				NewRouterFx,
