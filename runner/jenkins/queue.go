@@ -1,6 +1,9 @@
 package jenkins
 
-import "apx103.com/super-mid/command/cmd"
+import (
+	"apx103.com/super-mid/command/cmd"
+	"github.com/sirupsen/logrus"
+)
 
 type JenkinsQueueRunner struct {
 	JenkinsClient *JenkinsClient
@@ -17,6 +20,7 @@ func (jb *JenkinsQueueRunner) GetCmdPath() string {
 }
 
 func (jb *JenkinsQueueRunner) Run(*cmd.Task) {
+	logrus.Debug("Run command jenkins queue")
 }
 
 func (jb *JenkinsQueueRunner) Finish() {}

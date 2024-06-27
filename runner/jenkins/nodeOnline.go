@@ -1,6 +1,9 @@
 package jenkins
 
-import "apx103.com/super-mid/command/cmd"
+import (
+	"apx103.com/super-mid/command/cmd"
+	"github.com/sirupsen/logrus"
+)
 
 type JenkinsNodeOnlineRunner struct {
 	JenkinsClient *JenkinsClient
@@ -17,6 +20,7 @@ func (jb *JenkinsNodeOnlineRunner) GetCmdPath() string {
 }
 
 func (jb *JenkinsNodeOnlineRunner) Run(*cmd.Task) {
+	logrus.Debug("Run command jenkins online")
 }
 
 func (jb *JenkinsNodeOnlineRunner) Finish() {}

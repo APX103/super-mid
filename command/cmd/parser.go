@@ -150,6 +150,7 @@ func GetCobraType(cmd *cobra.Command, taskCmd *TaskCmd, param CobraParam) {
 	}
 }
 
+// TODO Fix this to cache ang help message(include Stderr)
 // Capture cobra.Command.Execute() to get help string
 func CaptureStdout(f func() error) string {
 	old := os.Stdout
