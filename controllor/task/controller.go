@@ -3,6 +3,7 @@ package task
 import (
 	"encoding/json"
 	"io"
+	"strings"
 
 	"apx103.com/super-mid/command/cmd"
 	"apx103.com/super-mid/message/feishu"
@@ -19,7 +20,7 @@ type TaskController struct {
 }
 
 func NewTaskController(cp *cmd.CmdParser) *TaskController {
-	logrus.Debug(" [Fx] NewTaskController Init ")
+	logrus.Debug(" [Fx] TaskController Init ")
 	controller := &TaskController{
 		Path:          "/task",
 		Method:        "POST",
@@ -45,11 +46,12 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 		}
 		// cmd parse
 		cmdStr := controller.CommandParser.ParseCommand(req.CommandLine)
-		if cmdStr != "" {
+		if cmdStr != "" && strings.Contains(cmdStr, "help") {
 			resp := &RunnerWebResponse{
-				Code:    "0",
-				Message: feishu.BuildSimpleFeishuCardWithText("Help", cmdStr),
-				Content: cmdStr,
+				Code:       "0",
+				Message:    "",
+				Content:    feishu.BuildSimpleFeishuCardWithText("Help", cmdStr),
+				HasContent: true,
 			}
 			c.JSON(200, resp)
 		}
@@ -62,9 +64,10 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 			TaskCmd:          controller.CommandParser.ParsedCmd,
 		}
 
-		// TODO runner
+		// runner
 		if controller.CommandParser.Runner != nil {
-			(*controller.CommandParser.Runner).Run(taskInfo)
+			logrus.Debugf("Run path: %s", controller.CommandParser.Runner.GetCmdPath())
+			controller.CommandParser.Runner.Run(taskInfo)
 		}
 	}
 	return controller

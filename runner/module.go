@@ -16,6 +16,7 @@ func AsRunner(f any) any {
 
 var Module = fx.Module("Runner",
 	fx.Provide(
+		jenkins.NewJenkinsClient,
 		AsRunner(jenkins.NewJenkinsBuildRunner),
 		AsRunner(jenkins.NewJenkinsNodeListRunner),
 		AsRunner(jenkins.NewJenkinsNodeOnlineRunner),

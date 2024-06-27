@@ -5,6 +5,7 @@ import (
 
 	"apx103.com/super-mid/utils/config"
 	"github.com/bndr/gojenkins"
+	"github.com/sirupsen/logrus"
 )
 
 type JenkinsClient struct {
@@ -12,7 +13,8 @@ type JenkinsClient struct {
 	C   *gojenkins.Jenkins
 }
 
-func NewJenkinsClienr(conf config.BaseConfig) *JenkinsClient {
+func NewJenkinsClient(conf *config.BaseConfig) *JenkinsClient {
+	logrus.Debug(" [Fx] JenkinsClient Init ")
 	ctx := context.Background()
 	jenkins := gojenkins.CreateJenkins(nil, conf.JenkinsConfig.Url, conf.JenkinsConfig.Username, conf.JenkinsConfig.Password)
 	return &JenkinsClient{

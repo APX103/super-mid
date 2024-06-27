@@ -89,7 +89,7 @@ func Server(lc fx.Lifecycle, routerFx RouterFx) *gin.Engine {
 		OnStart: func(ctx context.Context) error {
 			ln, err := net.Listen("tcp", srv.Addr)
 			if err != nil {
-				logrus.Errorf("[LarkBot] Failed to start HTTP Server at %s", srv.Addr)
+				logrus.Errorf("[SuperMID] Failed to start HTTP Server at %s", srv.Addr)
 				return err
 			}
 			go func() {
@@ -98,7 +98,7 @@ func Server(lc fx.Lifecycle, routerFx RouterFx) *gin.Engine {
 					logrus.Infof("Server stoped: %s", err)
 				}
 			}()
-			logrus.Infof("[LarkBot]Succeeded to start HTTP Server at %s", srv.Addr)
+			logrus.Infof("[SuperMID]Succeeded to start HTTP Server at %s", srv.Addr)
 			return nil
 
 		},
