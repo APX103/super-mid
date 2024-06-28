@@ -98,7 +98,7 @@ spec:
         paths:
           - backend:
               service:
-                name: super-mid-service
+                name: super-mid-svc
                 port:
                   number: 8080
             path: /

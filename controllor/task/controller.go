@@ -44,6 +44,7 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 			})
 			return
 		}
+		logrus.Debugf("Command line is: %s", req.CommandLine)
 		// cmd parse
 		cmdStr := controller.CommandParser.ParseCommand(req.CommandLine)
 		if cmdStr != "" && strings.Contains(cmdStr, "help") {
@@ -68,6 +69,9 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 		if controller.CommandParser.Runner != nil {
 			logrus.Debugf("Run path: %s", controller.CommandParser.Runner.GetCmdPath())
 			controller.CommandParser.Runner.Run(taskInfo)
+		} else {
+			// TODO Push taskInfo to Task Queue with CmdPath
+			logrus.Debugf("CMD path: %s. Pushed to TaskQueue", controller.CommandParser.CmdPath)
 		}
 	}
 	return controller
