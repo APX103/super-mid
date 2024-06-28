@@ -41,7 +41,10 @@ func (cp *CmdParser) ParseCommand(cmdString string) string {
 	}
 	_cmd := cp.CreateParser()
 	_cmd.SetArgs(args)
-	help_info := CaptureStdout(_cmd.Execute)
+	help_info, err := CaptureStdout(_cmd.Execute)
+	if err != nil {
+		return err.Error()
+	}
 	if help_info != "" {
 		// TODO 使用MSG模块发送，指令标准输出
 		fmt.Println(help_info)
@@ -158,17 +161,17 @@ func GetCobraType(cmd *cobra.Command, taskCmd *TaskCmd, param CobraParam) {
 
 // TODO Fix this to cache ang help message(include Stderr)
 // Capture cobra.Command.Execute() to get help string
-func CaptureStdout(f func() error) string {
+func CaptureStdout(f func() error) (string, error) {
 	old := os.Stdout
 	r, w, _ := os.Pipe()
 	os.Stdout = w
 
-	f()
+	err := f()
 
 	w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
 	io.Copy(&buf, r)
-	return buf.String()
+	return buf.String(), err
 }
