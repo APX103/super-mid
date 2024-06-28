@@ -14,6 +14,7 @@ import (
 )
 
 type CmdParser struct {
+	CmdPath   string
 	ParsedCmd *TaskCmd
 	mongoC    *mongoc.MongoClientImpl
 	runnerMap *TaskRunnerMap
@@ -23,6 +24,7 @@ type CmdParser struct {
 func NewCmdParser(mongoc *mongoc.MongoClientImpl, rm *TaskRunnerMap) *CmdParser {
 	logrus.Debug(" [Fx] CmdParser Init ")
 	return &CmdParser{
+		CmdPath:   "",
 		mongoC:    mongoc,
 		runnerMap: rm,
 		Runner:    nil,
@@ -106,8 +108,12 @@ func (cp *CmdParser) NewCommand(rootCmd *cobra.Command, item *CobraCMD, taskCmd 
 		Long:  item.Long,
 		Run: func(cmd *cobra.Command, args []string) {
 			_taskCmd.Enable = true
-			// TODO Inject task runner here
-			cp.Runner = cp.runnerMap.runners[_cmdPath]
+			cp.CmdPath = _cmdPath
+			if runner, ok := cp.runnerMap.runners[_cmdPath]; ok {
+				cp.Runner = runner
+			} else {
+				cp.Runner = nil
+			}
 			logrus.Debug("============+ " + _cmdPath + " +============")
 		},
 	}

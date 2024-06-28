@@ -44,14 +44,22 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 			})
 			return
 		}
-		logrus.Debugf("Command line is: %s", req.CommandLine)
+		logrus.Infof("Command line is: %s", req.CommandLine)
 		// cmd parse
 		cmdStr := controller.CommandParser.ParseCommand(req.CommandLine)
-		if cmdStr != "" && strings.Contains(cmdStr, "help") {
+		if strings.Contains(cmdStr, "help") {
 			resp := &RunnerWebResponse{
 				Code:       "0",
 				Message:    "",
 				Content:    feishu.BuildSimpleFeishuCardWithText("Help", cmdStr),
+				HasContent: true,
+			}
+			c.JSON(200, resp)
+		} else if cmdStr != "" {
+			resp := &RunnerWebResponse{
+				Code:       "1",
+				Message:    "",
+				Content:    feishu.BuildSimpleFeishuCardWithText("Error", cmdStr),
 				HasContent: true,
 			}
 			c.JSON(200, resp)
