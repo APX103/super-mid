@@ -55,6 +55,7 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 				HasContent: true,
 			}
 			c.JSON(200, resp)
+			return
 		} else if cmdStr != "" {
 			resp := &RunnerWebResponse{
 				Code:       "1",
@@ -63,6 +64,7 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 				HasContent: true,
 			}
 			c.JSON(200, resp)
+			return
 		}
 		taskInfo := &cmd.Task{
 			TaskID:           uuid.NewV1().String(),
@@ -77,10 +79,24 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 		if controller.CommandParser.Runner != nil {
 			logrus.Debugf("Run path: %s", controller.CommandParser.Runner.GetCmdPath())
 			controller.CommandParser.Runner.Run(taskInfo)
-		} else {
-			// TODO Push taskInfo to Task Queue with CmdPath
-			logrus.Debugf("CMD path: %s. Pushed to TaskQueue", controller.CommandParser.CmdPath)
+			resp := &RunnerWebResponse{
+				Code:       "0",
+				Message:    "",
+				Content:    feishu.BuildSimpleFeishuCardWithText("Task Run", controller.CommandParser.Runner.GetCmdPath()+" task launched.", "green"),
+				HasContent: true,
+			}
+			c.JSON(200, resp)
+			return
 		}
+		// TODO Push taskInfo to Task Queue with CmdPath
+		logrus.Debugf("CMD path: %s. Pushed to TaskQueue", controller.CommandParser.CmdPath)
+		resp := &RunnerWebResponse{
+			Code:       "0",
+			Message:    "",
+			Content:    feishu.BuildSimpleFeishuCardWithText("Task Push", controller.CommandParser.Runner.GetCmdPath()+" task pushed.(no runner inside)", "green"),
+			HasContent: true,
+		}
+		c.JSON(200, resp)
 	}
 	return controller
 }
