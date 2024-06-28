@@ -4,6 +4,7 @@ stages:
 
 build:
   stage: build
+  image: eng-center-registry.cn-shanghai.cr.aliyuncs.com/public/docker-git:latest
   before_script:
     - docker login $harbor_url_prod_openmmlab -u $harbor_user_openmmlab -p $harbor_password_openmmlab
   script:
