@@ -51,7 +51,7 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 			resp := &RunnerWebResponse{
 				Code:       "0",
 				Message:    "",
-				Content:    feishu.BuildSimpleFeishuCardWithText("Help", cmdStr),
+				Content:    feishu.BuildSimpleFeishuCardWithText("Help", cmdStr, "green"),
 				HasContent: true,
 			}
 			c.JSON(200, resp)
@@ -59,7 +59,7 @@ func NewTaskController(cp *cmd.CmdParser) *TaskController {
 			resp := &RunnerWebResponse{
 				Code:       "1",
 				Message:    "",
-				Content:    feishu.BuildSimpleFeishuCardWithText("Error", cmdStr),
+				Content:    feishu.BuildSimpleFeishuCardWithText("Error", cmdStr, "red"),
 				HasContent: true,
 			}
 			c.JSON(200, resp)

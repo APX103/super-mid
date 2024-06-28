@@ -6,13 +6,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func BuildSimpleFeishuCardWithText(title string, txt string) string {
+func BuildSimpleFeishuCardWithText(title string, txt string, color string) string {
+	if color == "" {
+		color = "green"
+	}
 	cardContent := &CardContent{
 		Header: &CardHeader{
 			Title: &CardText{
 				Tag:     "plain_text",
 				Content: title,
 			},
+			Template: color,
 		},
 		Config: &CardConfig{
 			WideScreenMode: true,
